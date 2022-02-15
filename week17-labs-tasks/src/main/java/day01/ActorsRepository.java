@@ -1,4 +1,4 @@
-import org.mariadb.jdbc.MariaDbDataSource;
+package day01;
 
 import javax.sql.DataSource;
 import java.sql.*;

@@ -1,3 +1,6 @@
+package day01;
+
+import org.flywaydb.core.Flyway;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.SQLException;
@@ -14,7 +17,12 @@ public class MoviesActorsMain {
         }
 
         ActorsRepository actorsRepository = new ActorsRepository(dataSource);
-        //System.out.println(actorsRepository.saveActor("Jane Doe"));
+
+        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        flyway.clean();
+        flyway.migrate();
+
+        System.out.println(actorsRepository.saveActor("Jane Doe"));
 
         System.out.println(actorsRepository.findActorsWithPrefix("Ja"));
     }
