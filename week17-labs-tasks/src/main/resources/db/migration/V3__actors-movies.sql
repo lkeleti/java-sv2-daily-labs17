@@ -1,0 +1,1 @@
+CREATE TABLE actors_movies(id BIGINT AUTO_INCREMENT PRIMARY KEY, actor_id BIGINT, movie_id BIGINT);
