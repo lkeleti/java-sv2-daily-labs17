@@ -5,6 +5,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MoviesRepository {
 
@@ -48,7 +49,7 @@ public class MoviesRepository {
         ) {
             List<Movie> result = new ArrayList<>();
             while (rs.next()) {
-                result.add( new Movie(
+                result.add(new Movie(
                         rs.getLong("id"),
                         rs.getString("title"),
                         rs.getDate("release_date").toLocalDate()
@@ -57,6 +58,31 @@ public class MoviesRepository {
             return result;
         } catch (SQLException sqle) {
             throw new IllegalStateException("Can't fid movies", sqle);
+        }
+    }
+
+    public Optional<Movie> findMovieByTitle(String title) {
+        try (
+                Connection conn = dataSource.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM movies WHERE title=?");
+        ) {
+            pstmt.setString(1, title);
+            return findMovieByTitleByStatement(pstmt);
+
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Can't select movie by title.", sqle);
+        }
+    }
+
+    private Optional<Movie> findMovieByTitleByStatement(PreparedStatement pstmt) throws SQLException {
+        try (
+                ResultSet rs = pstmt.executeQuery();
+        ) {
+            if (rs.next()) {
+                return Optional.of(new Movie(rs.getLong("id"), rs.getString("title"), rs.getDate("release_date").toLocalDate()));
+            } else {
+                return Optional.empty();
+            }
         }
     }
 }

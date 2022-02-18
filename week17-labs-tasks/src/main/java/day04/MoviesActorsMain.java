@@ -28,10 +28,15 @@ public class MoviesActorsMain {
         ActorsRepository actorsRepository = new ActorsRepository(dataSource);
         MoviesRepository moviesRepository = new MoviesRepository(dataSource);
         ActorsMoviesRepository actorsMoviesRepository = new ActorsMoviesRepository(dataSource);
+        RatingRepository ratingRepository = new RatingRepository(dataSource);
 
         ActorsMoviesService actorsMoviesService = new ActorsMoviesService(actorsRepository,moviesRepository,actorsMoviesRepository);
+        MoviesRatingsService moviesRatingsService = new MoviesRatingsService(moviesRepository, ratingRepository);
 
         actorsMoviesService.insertMovieWithActors("Titanic", LocalDate.of(1997,11,13), List.of("Leonardo DiCaprio", "Kate Winslet"));
         actorsMoviesService.insertMovieWithActors("Great Gatsby", LocalDate.of(2012,12,11), List.of("Leonardo DiCaprio", "Toby McGuyer"));
+
+        moviesRatingsService.addRatings("Titanic",5,4,5,5,5,4,5);
+        moviesRatingsService.addRatings("Great Gatsby",5,4,5,5,5,4,6);
     }
 }
