@@ -1,6 +1,5 @@
 package day04;
 
-import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -18,6 +17,8 @@ public class MoviesRatingsService {
         if (movieResult.isPresent()) {
             long movieId = movieResult.get().getId();
             ratingRepository.insertRating(movieId, Arrays.asList(ratings));
+            double avgRating = ratingRepository.calculateAvgRating(movieId);
+            moviesRepository.setAvgRaing(movieId, avgRating);
         }
         else {
             throw new IllegalArgumentException("Can't find movie");

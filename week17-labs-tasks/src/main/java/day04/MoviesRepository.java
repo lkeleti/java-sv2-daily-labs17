@@ -85,4 +85,17 @@ public class MoviesRepository {
             }
         }
     }
+
+    public void setAvgRaing(long movieId, double avgRating) {
+        try (
+                Connection conn = dataSource.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("UPDATE movies SET avg_rating = ? WHERE id = ?")
+        ) {
+            pstmt.setDouble(1,avgRating);
+            pstmt.setLong(2,movieId);
+            pstmt.executeUpdate();
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Can't update movies by average rating", sqle);
+        }
+    }
 }
